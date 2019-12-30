@@ -1,0 +1,33 @@
+{
+  "name": "full-stack-capstone-server",
+  "version": "1.0.0",
+  "description": "## Full-stack capstone project",
+  "main": "postgrator-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --require test/setup.js",
+    "dev": "nodemon ./src/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "font-awesome": "^4.7.0",
+    "helmet": "^3.21.2",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.20.6",
+    "morgan": "^1.9.1",
+    "pg": "^7.17.0",
+    "uuid": "^3.3.3",
+    "winston": "^3.2.1",
+    "xss": "^1.0.6"
+  }
+}

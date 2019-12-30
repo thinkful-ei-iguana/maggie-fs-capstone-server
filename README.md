@@ -1,0 +1,6 @@
+# Street Beat
+
+## Full-stack capstone project
+
+Street Beat is a site specifically designed for members of the international street band community - think guerrilla marching bands, a la New Orleans. On Street Beat, band members can sign up for an individual profile and use a private dashboard to manage the bands that they are in. Band pages will be exclusive to those who are confirmed members, and will be a central place to keep resources that are typically decentralized, if they exist at all, including repertoire list, a place to easily post set lists for gigs and practices, links to other important external resources (band public website, calendar, etc).
+In the future, I have ideas for more robust features (including a part of the site that faces the more global community, and not just inward-facing band by band), but for the purposes of this project, I aim to build a site that connects band members, provides a space for them to post and maintain important shared resources, and includes a set-list creator tool.
