@@ -8,7 +8,10 @@
   },
   "scripts": {
     "test": "mocha --require test/setup.js",
-    "dev": "nodemon ./src/server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "predeploy": "npm audit",
+    "deploy": "git push heroku master"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +29,7 @@
     "knex": "^0.20.6",
     "morgan": "^1.9.1",
     "pg": "^7.17.0",
+    "supertest": "^4.0.2",
     "uuid": "^3.3.3",
     "winston": "^3.2.1",
     "xss": "^1.0.6"
