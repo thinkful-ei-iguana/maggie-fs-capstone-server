@@ -11,12 +11,35 @@ const UsersService = {
       .first()
       .then(user => !!user);
   },
+  getAllUsers(knex) {
+    return knex.select('*').from('street_users');
+  },
   insertUser(db, newUser) {
     return db
       .insert(newUser)
       .into('street_users')
       .returning('*')
       .then(([user]) => user);
+  },
+  getById(knex, id) {
+    return knex
+      .from('street_users')
+      .select('*')
+      .where('id', id)
+      .first();
+  },
+
+  getMembersByBandId(knex, id) {
+    return knex
+      .from('street_band_members')
+      .where('band_id', id)
+      .join('street_users', { 'street_band_members.band_id': 'street_users.id' })
+      .select('first_name', 'last_name');
+  },
+  deleteUser(knex, id) {
+    return knex('street_users')
+      .where({ id })
+      .delete();
   },
   validatePassword(password) {
     if (password.length < 8) {

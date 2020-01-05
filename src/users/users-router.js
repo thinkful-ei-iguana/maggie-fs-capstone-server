@@ -1,13 +1,31 @@
 const express = require('express');
 const path = require('path');
 const UsersService = require('./users-service');
+const requireAuth = require('../middleware/jwt-auth');
 
 const usersRouter = express.Router();
 const jsonBodyParser = express.json();
 
+const serializeUser = user => ({
+  id: user.id,
+  first_name: user.first_name,
+  last_name: user.last_name,
+  email: user.email,
+  password: user.password
+});
+
+const serializeBand = band => ({
+  band_name: band.band_name
+});
+
+
+
+
+//individual user
 usersRouter
-  .post('/', jsonBodyParser, (req, res, next) => {
-    const { id, first_name, last_name, email, password } = req.body;
+  .route('/')
+  .post(jsonBodyParser, (req, res, next) => {
+    const { first_name, last_name, email, password } = req.body;
 
     for (const field of ['first_name', 'last_name', 'email', 'password'])
       if (!req.body[field])
@@ -50,6 +68,17 @@ usersRouter
           });
       })
       .catch(next);
+  })
+  .delete(requireAuth, (req, res, next) => {
+    UsersService.deleteUser(
+      req.app.get('db'),
+      req.params.user_id
+    )
+      .then(numRowsAffected => {
+        res.status(204).end();
+      })
+      .catch(next);
   });
+
 
 module.exports = usersRouter;

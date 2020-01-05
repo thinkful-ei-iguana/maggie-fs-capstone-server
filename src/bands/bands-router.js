@@ -2,32 +2,52 @@ const path = require('path');
 const express = require('express');
 const xss = require('xss');
 const BandsService = require('./bands-service');
+const BandMembersService = require('../bandMembers/bandMembers-service');
+const requireAuth = require('../middleware/jwt-auth');
+
+//protected endpoint
 
 const bandsRouter = express.Router();
 const jsonParser = express.json();
 
-const serializeBand = band => ({
-  id: band.id,
-  band_name: band.band_name,
-  city: band.city,
-  state: band.state,
-  country: band.country,
-  description: band.description
-});
+// const serializeBand = band => ({
+//   id: band.id,
+//   band_name: band.band_name,
+//   city: band.city,
+//   state: band.state,
+//   country: band.country,
+//   description: band.description
+// });
+const serializeBand = (band) => {
+  return {
+    ...band
+  }
+};
 
 bandsRouter
   .route('/')
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     const knexInstance = req.app.get('db');
     BandsService.getAllBands(knexInstance)
       .then(bands => {
-        res.json(bands.map(serializeBand));
+        if (req.query.q) {
+          const filterResults = bands.filter((band) => {
+            return band.band_name.toLowerCase().includes(req.query.q.toLowerCase());
+          });
+          console.log('filterresults is', filterResults);
+          res.json(filterResults.map(serializeBand));
+        } else {
+          console.log('bands is', bands);
+          res.json(bands.map(serializeBand));
+        }
       })
-      .catch(next);
+      .catch((err) => {
+        next(err);
+      });
   })
-  .post(jsonParser, (req, res, next) => {
-    const { id, band_name, city, state, country, description } = req.body;
-    const newBand = { id, band_name, city, state, country, description };
+  .post(jsonParser, requireAuth, (req, res, next) => {
+    const { band_name, city, state, country, description } = req.body;
+    const newBand = { band_name, city, state, country, description };
 
     for (const [key, value] of Object.entries(newBand))
       if (value === null)
@@ -46,11 +66,25 @@ bandsRouter
           .json(serializeBand(band));
       })
       .catch(next);
-  })
+  });
+
+bandsRouter
+  .route('/mybands')
+  .get(requireAuth, (req, res, next) => {
+    const knexInstance = req.app.get('db');
+    BandsService.getBandsByUserId(knexInstance, req.user.id)
+      .then(bands => {
+        console.log('bands is', bands);
+        res.json(bands);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  });
 
 bandsRouter
   .route('/:band_id')
-  .all((req, res, next) => {
+  .all(requireAuth, (req, res, next) => {
     BandsService.getById(
       req.app.get('db'),
       req.params.band_id
@@ -66,10 +100,10 @@ bandsRouter
       })
       .catch(next);
   })
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     res.json(serializeBand(res.band));
   })
-  .delete((req, res, next) => {
+  .delete(requireAuth, (req, res, next) => {
     BandsService.deleteBand(
       req.app.get('db'),
       req.params.band_id
@@ -79,7 +113,7 @@ bandsRouter
       })
       .catch(next);
   })
-  .patch(jsonParser, (req, res, next) => {
+  .patch(jsonParser, requireAuth, (req, res, next) => {
     const { id, band_name, city, state, country, description } = req.body;
     const bandToUpdate = { id, band_name, city, state, country, description };
 
@@ -103,6 +137,179 @@ bandsRouter
       .catch(next);
   });
 
+bandsRouter
+  .route('/:band_id/setlists')
+  .get(requireAuth, (req, res, next) => {
+    const knexInstance = req.app.get('db');
+    console.log('reqparamsid is', req.params);
+    BandsService.getSetlistsByBandId(knexInstance, req.params.band_id)
+      .then(setlists => {
+        console.log('setlists is', setlists);
+        res.json(setlists);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  })
+  .post(jsonParser, requireAuth, (req, res, next) => {
+    const { title, date } = req.body;
+    const newSetlist = { title, date };
+
+    for (const [key, value] of Object.entries(newSetlist))
+      if (value === null)
+        return res.status(400).json({
+          error: { message: `Missing ${key} in request body` }
+        });
+
+    BandsService.insertSetlist(
+      req.app.get('db'),
+      newSetlist
+    )
+      .then(setlist => {
+        res
+          .status(201)
+          .location(path.posix.join(req.originalUrl, `/${setlist.id}`))
+          .json(setlist);
+      })
+      .catch(next);
+  });
+
+bandsRouter
+  .post('/:band_id/join', jsonParser, requireAuth, (req, res, next) => {
+
+    const newBandMember = { band_id: req.params.band_id, user_id: req.user.id };
+
+    for (const [key, value] of Object.entries(newBandMember))
+      if (value === null)
+        return res.status(400).json({
+          error: { message: `Missing ${key} in request body` }
+        });
+
+    BandsService.insertBandMember(
+      req.app.get('db'),
+      newBandMember
+    )
+      .then(member => {
+        res
+          .status(201)
+          .location(path.posix.join(req.originalUrl, `/${member.id}`))
+          .json(member);
+      })
+      .catch(next);
+  });
+
+
+bandsRouter
+  .route('/:band_id/bandmembers')
+  .get(requireAuth, (req, res, next) => {
+    const knexInstance = req.app.get('db');
+    BandsService.getMembersByBandId(knexInstance, req.params.band_id)
+      .then(members => {
+        res.json(members);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  })
+
+
+bandsRouter
+  .route('/:band_id/songs')
+  .get(requireAuth, (req, res, next) => {
+    const knexInstance = req.app.get('db');
+    console.log('reqparamsid is', req.params.band_id);
+    BandsService.getSongsByBandId(knexInstance, req.params.band_id)
+      .then(songs => {
+        console.log('songs is', songs);
+        res.json(songs);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  })
+  .post(jsonParser, requireAuth, (req, res, next) => {
+    const { title, artist, duration } = req.body;
+    const newSong = { title, artist, duration };
+
+    for (const [key, value] of Object.entries(newSong))
+      if (value === null)
+        return res.status(400).json({
+          error: { message: `Missing ${key} in request body` }
+        });
+
+    BandsService.insertSong(
+      req.app.get('db'),
+      newSong
+    )
+      .then(song => {
+        res
+          .status(201)
+          .location(path.posix.join(req.originalUrl, `/${song.id}`))
+          .json(song);
+      })
+      .catch(next);
+  });
+
+bandsRouter
+  .route('/:band_id/setlists/:setlist_id')
+  .get(requireAuth, (req, res, next) => {
+    const knexInstance = req.app.get('db');
+    // console.log('reqparamsid is', req);
+    BandsService.getSetlistById(knexInstance, req.params.setlist_id)
+      .then(setlists => {
+        // console.log('setlists is', res.json(setlists));
+        res.json(setlists);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  });
+
+bandsRouter
+  .route('/:band_id/setlists/create')
+  .post(jsonParser, requireAuth, (req, res, next) => {
+    const newSetlist = req.body.newSetlist;
+    // console.log('post reqbody is', req.body);
+
+    BandsService.insertSetlist(req.app.get('db'), newSetlist)
+
+      .then((setlist) => {
+        const songsToAdd = req.body.songsToAdd;
+        // console.log('setlist id', setlist.id);
+
+        for (let i = 0; i < songsToAdd.length; i++) {
+
+          if (!songsToAdd[i].song_id || !songsToAdd[i].band_id) {
+            return res.status(400).json({
+              error: { message: `Missing ${key} in request body` }
+            });
+          }
+        }
+
+        // adds each song to the db in order, waiting for the previous db write to succeed before writing the next song
+
+        let updates = Promise.resolve();
+        for (let i = 0; i < songsToAdd.length; ++i) {
+          // the line below is like += for promises
+          updates = updates.then(() => {
+            return BandsService.updateSetlist(
+              req.app.get('db'),
+              songsToAdd[i].song_id,
+              setlist.id,
+              songsToAdd[i].band_id,
+            );
+          });
+        }
+        return updates;
+      })
+      .then(numRowsAffected => {
+        console.log('this is the place');
+        res
+          .status(200)
+          .json({});
+      })
+      .catch(next);
+  });
 
 
 module.exports = bandsRouter;
