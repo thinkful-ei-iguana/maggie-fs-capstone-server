@@ -16,6 +16,11 @@ const BandsService = {
       .delete();
   },
 
+  getAllBands(knex) {
+    return knex
+      .select('*')
+      .from('street_bands');
+  },
   getBandWithBandName(db, band_name) {
     return db('street_bands')
       .where({ band_name })
@@ -45,19 +50,26 @@ const BandsService = {
       .select('street_users.first_name', 'street_users.last_name');
   },
 
+  getSetlistById(knex, id) {
+    console.log('getsetlistbyid');
+    return knex
+      .from('street_setlist_songs AS sss')
+      .where('sss.setlist_id', id)
+      .leftJoin('street_setlists', { 'sss.setlist_id': 'street_setlists.id' })
+      .leftJoin('street_songs', { 'sss.song_id': 'street_songs.id' })
+      .select('street_setlists.title',
+        'street_setlists.date',
+        'street_songs.title',
+        'street_songs.artist',
+        'street_songs.duration'
+      );
+  },
   getSetlistsByBandId(knex, id) {
     return knex
       .from('street_setlist_songs')
       .where('street_setlist_songs.band_id', id)
       .join('street_setlists', { 'street_setlist_songs.setlist_id': 'street_setlists.id' })
-      .distinct('street_setlists.title', 'street_setlists.date');
-  },
-  getSetlistById(knex, id) {
-    return knex
-      .from('street_setlists')
-      .select('*')
-      .where('street_setlists.id', id)
-      .first();
+      .distinct('street_setlists.title', 'street_setlists.date', 'street_setlists.id');
   },
 
   getSongIdByTitle(knex, songTitle) {
@@ -67,7 +79,6 @@ const BandsService = {
       .where('street_songs.title', songTitle);
   },
   getSongsByBandId(knex, id) {
-    console.log('getSongsbybandid');
     return knex
       .from('street_songs')
       .where('street_songs.band_id', id)
@@ -95,7 +106,7 @@ const BandsService = {
   },
 
   insertSetlist(knex, newSetlist) {
-    console.log('insertSetlist', newSetlist);
+    console.log('insertSetlist');
     return knex
       .insert(newSetlist)
       .into('street_setlists')
@@ -106,6 +117,7 @@ const BandsService = {
   },
 
   insertSong(knex, newSong) {
+    console.log('insertSong');
     return knex
       .insert(newSong)
       .into('street_songs')
@@ -121,13 +133,14 @@ const BandsService = {
       .update(newBandFields);
   },
 
-  updateSetlist(knex, song_id, setlist_id, band_id) {
+  updateSetlist(knex, song_id, setlist_id, band_id, song_position) {
     console.log('updateSetlist');
     return knex
       .insert({
         song_id: song_id,
         setlist_id: setlist_id,
-        band_id: band_id
+        band_id: band_id,
+        song_position: song_position
       })
       .into('street_setlist_songs')
       .returning('*')

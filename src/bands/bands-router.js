@@ -217,10 +217,8 @@ bandsRouter
   .route('/:band_id/songs')
   .get(requireAuth, (req, res, next) => {
     const knexInstance = req.app.get('db');
-    console.log('reqparamsid is', req.params.band_id);
     BandsService.getSongsByBandId(knexInstance, req.params.band_id)
       .then(songs => {
-        console.log('songs is', songs);
         res.json(songs);
       })
       .catch((err) => {
@@ -228,15 +226,15 @@ bandsRouter
       });
   })
   .post(jsonParser, requireAuth, (req, res, next) => {
-    const { title, artist, duration } = req.body;
-    const newSong = { title, artist, duration };
-
+    const { bandId, title, artist, duration } = req.body;
+    const newSong = { bandId, title, artist, duration };
+    console.log('pre insert song')
     for (const [key, value] of Object.entries(newSong))
       if (value === null)
         return res.status(400).json({
           error: { message: `Missing ${key} in request body` }
         });
-
+    console.log('pre insert song')
     BandsService.insertSong(
       req.app.get('db'),
       newSong
@@ -256,9 +254,9 @@ bandsRouter
     const knexInstance = req.app.get('db');
     // console.log('reqparamsid is', req);
     BandsService.getSetlistById(knexInstance, req.params.setlist_id)
-      .then(setlists => {
-        // console.log('setlists is', res.json(setlists));
-        res.json(setlists);
+      .then(setlist => {
+        console.log('setlist is', setlist);
+        res.json(setlist);
       })
       .catch((err) => {
         next(err);
@@ -269,16 +267,12 @@ bandsRouter
   .route('/:band_id/setlists/create')
   .post(jsonParser, requireAuth, (req, res, next) => {
     const newSetlist = req.body.newSetlist;
-    // console.log('post reqbody is', req.body);
 
     BandsService.insertSetlist(req.app.get('db'), newSetlist)
 
       .then((setlist) => {
         const songsToAdd = req.body.songsToAdd;
-        // console.log('setlist id', setlist.id);
-
         for (let i = 0; i < songsToAdd.length; i++) {
-
           if (!songsToAdd[i].song_id || !songsToAdd[i].band_id) {
             return res.status(400).json({
               error: { message: `Missing ${key} in request body` }
@@ -287,7 +281,6 @@ bandsRouter
         }
 
         // adds each song to the db in order, waiting for the previous db write to succeed before writing the next song
-
         let updates = Promise.resolve();
         for (let i = 0; i < songsToAdd.length; ++i) {
           // the line below is like += for promises
@@ -297,16 +290,22 @@ bandsRouter
               songsToAdd[i].song_id,
               setlist.id,
               songsToAdd[i].band_id,
+              i
             );
           });
         }
-        return updates;
+        return updates
+          .then(() => {
+            return setlist;
+          });
       })
-      .then(numRowsAffected => {
-        console.log('this is the place');
+      .then((setlist) => {
+        console.log('finished saving setlist', setlist);
         res
           .status(200)
-          .json({});
+          .json({
+            setlist_id: setlist.id
+          });
       })
       .catch(next);
   });
