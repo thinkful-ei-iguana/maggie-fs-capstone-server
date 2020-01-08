@@ -47,7 +47,8 @@ const BandsService = {
       .from('street_band_members')
       .where('street_band_members.band_id', id)
       .join('street_users', { 'street_band_members.user_id': 'street_users.id' })
-      .select('street_users.first_name', 'street_users.last_name');
+      .join('street_bands', { 'street_band_members.band_id': 'street_bands.id' })
+      .select('street_users.first_name', 'street_users.last_name', 'street_bands.band_name');
   },
 
   getSetlistById(knex, id) {
@@ -61,7 +62,8 @@ const BandsService = {
         'street_setlists.date',
         'street_songs.title',
         'street_songs.artist',
-        'street_songs.duration'
+        'street_songs.duration',
+        'street_setlists.total_duration'
       );
   },
   getSetlistsByBandId(knex, id) {

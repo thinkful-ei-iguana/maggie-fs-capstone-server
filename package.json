@@ -18,7 +18,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "postgrator-cli": "^3.3.0"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

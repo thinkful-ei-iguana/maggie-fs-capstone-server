@@ -141,7 +141,6 @@ bandsRouter
   .route('/:band_id/setlists')
   .get(requireAuth, (req, res, next) => {
     const knexInstance = req.app.get('db');
-    console.log('reqparamsid is', req.params);
     BandsService.getSetlistsByBandId(knexInstance, req.params.band_id)
       .then(setlists => {
         console.log('setlists is', setlists);
@@ -151,28 +150,30 @@ bandsRouter
         next(err);
       });
   })
-  .post(jsonParser, requireAuth, (req, res, next) => {
-    const { title, date } = req.body;
-    const newSetlist = { title, date };
+// .post(jsonParser, requireAuth, (req, res, next) => {
+//   const { title, date } = req.body;
+//   const newSetlist = { title, date };
+//   console.log('newSetlist is', newSetlist);
 
-    for (const [key, value] of Object.entries(newSetlist))
-      if (value === null)
-        return res.status(400).json({
-          error: { message: `Missing ${key} in request body` }
-        });
+//   for (const [key, value] of Object.entries(newSetlist))
+//     if (value === null)
+//       return res.status(400).json({
+//         error: { message: `Missing ${key} in request body` }
+//       });
 
-    BandsService.insertSetlist(
-      req.app.get('db'),
-      newSetlist
-    )
-      .then(setlist => {
-        res
-          .status(201)
-          .location(path.posix.join(req.originalUrl, `/${setlist.id}`))
-          .json(setlist);
-      })
-      .catch(next);
-  });
+//   BandsService.insertSetlist(
+//     req.app.get('db'),
+//     newSetlist
+//   )
+//     .then(setlist => {
+//       console.log('setlist is', setlist);
+//       res
+//         .status(201)
+//         .location(path.posix.join(req.originalUrl, `/${setlist.id}`))
+//         .json(setlist);
+//     })
+//     .catch(next);
+// });
 
 bandsRouter
   .post('/:band_id/join', jsonParser, requireAuth, (req, res, next) => {
@@ -226,8 +227,9 @@ bandsRouter
       });
   })
   .post(jsonParser, requireAuth, (req, res, next) => {
-    const { bandId, title, artist, duration } = req.body;
-    const newSong = { bandId, title, artist, duration };
+    console.log('req.body is', req.body);
+    const { band_id, title, artist, duration } = req.body;
+    const newSong = { band_id, title, artist, duration };
     console.log('pre insert song')
     for (const [key, value] of Object.entries(newSong))
       if (value === null)
@@ -255,13 +257,38 @@ bandsRouter
     // console.log('reqparamsid is', req);
     BandsService.getSetlistById(knexInstance, req.params.setlist_id)
       .then(setlist => {
-        console.log('setlist is', setlist);
+        // console.log('setlist is', setlist);
         res.json(setlist);
       })
       .catch((err) => {
         next(err);
       });
-  });
+  })
+// under construction
+// .patch(jsonParser, requireAuth, (req, res, next) => {
+//   const { song_id, band_id, setlist_id, song_position } = req.body;
+//   const setlistToUpdate = { song_id, band_id, setlist_id, song_position };
+
+//   const numberOfValues = Object.values(setlistToUpdate).filter(Boolean).length;
+//   if (numberOfValues === 0) {
+//     return res.status(400).json({
+//       error: {
+//         message: 'Request body must contain either title, artist, or duration'
+//       }
+//     });
+//   }
+
+//   BandsService.updateSetlist(
+//     req.app.get('db'),
+//     req.params.band_id,
+//     setlistToUpdate
+//   )
+//     .then(numRowsAffected => {
+//       res.status(204).end();
+//     })
+//     .catch(next);
+// });
+// /////////////////////////////////////////
 
 bandsRouter
   .route('/:band_id/setlists/create')
@@ -272,6 +299,7 @@ bandsRouter
 
       .then((setlist) => {
         const songsToAdd = req.body.songsToAdd;
+        console.log('songstoadd are', songsToAdd);
         for (let i = 0; i < songsToAdd.length; i++) {
           if (!songsToAdd[i].song_id || !songsToAdd[i].band_id) {
             return res.status(400).json({
