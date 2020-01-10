@@ -7,6 +7,7 @@ const requireAuth = require('../middleware/jwt-auth');
 const bandsRouter = express.Router();
 const jsonParser = express.json();
 
+
 const serializeBand = (band) => {
   return {
     ...band

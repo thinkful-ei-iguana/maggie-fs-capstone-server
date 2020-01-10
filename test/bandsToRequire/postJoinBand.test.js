@@ -16,7 +16,7 @@ before('make knex instance', () => {
 });
 
 context('Happy path', () => {
-  it.only('responds 204 and user id is added to band members table as having joined the indicated band', () => {
+  it.only('responds 204 and user id is added to bandmembers table as having joined the indicated band', () => {
     const newBandMember = {
       id: 10,
       first_name: 'test-user-1',
