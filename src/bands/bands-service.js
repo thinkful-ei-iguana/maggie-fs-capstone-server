@@ -103,8 +103,6 @@ const BandsService = {
         console.error('error trying to create new band:', err);
         throw err;
       });
-
-
   },
 
   insertBandMember(knex, newBandMember) {
