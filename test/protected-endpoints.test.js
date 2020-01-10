@@ -87,12 +87,6 @@ describe('Protected Endpoints', function () {
       path: '/api/bands/1/setlists/1',
       method: supertest(app).get,
     },
-    // functionality under construction
-    // {
-    //   name: 'PATCH /api/bands/:band_id/setlists/:setlist_id',
-    //   path: '/api/bands/1/setlists/1',
-    //   method: supertest(app).patch,
-    // },
     {
       name: 'POST /api/bands/:band_id/setlists/create',
       path: '/api/bands/1/setlists/create',

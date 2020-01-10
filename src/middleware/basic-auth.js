@@ -20,30 +20,26 @@ function requireAuth(req, res, next) {
     return res.status(401).json({ error: 'Unauthorized Request' });
   }
 
-  //query database for user matching a given username
-  // req.app.get('db')('thingful_users')
-  //   .where({ user_name: tokenUserName })
-  //   .first()
   AuthService.getUserWithUserName(
     req.app.get('db'),
     tokenUserName
   )
     .then(user => {
       if (!user) {
-        return res.status(401).json({ error: 'Unauthorized Request' })
+        return res.status(401).json({ error: 'Unauthorized Request' });
       }
       return AuthService.comparePasswords(tokenPassword, user.password)
         .then(passwordsMatch => {
           if (!passwordsMatch) {
-            return res.status(401).json({ error: 'Unauthorized Request' })
+            return res.status(401).json({ error: 'Unauthorized Request' });
           }
           req.user = user;
           next();
-        })
+        });
     })
     .catch(next);
 }
 
 module.exports = {
   requireAuth,
-}
+};

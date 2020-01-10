@@ -16,10 +16,10 @@ before('make knex instance', () => {
 });
 
 context('Happy path', () => {
-  it('responds 204 and adds the new band', () => {
+  it.only('responds 204 and adds the new band', () => {
     const newBand = {
       id: 9,
-      band_name: 'Nine test thing!',
+      band_name: 'Nine test band!',
       city: 'City9',
       state: 'State9',
       country: 'Country9',

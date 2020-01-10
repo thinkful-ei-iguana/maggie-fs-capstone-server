@@ -1,14 +1,11 @@
 const knex = require('knex');
 const app = require('../../src/app');
 const helpers = require('../test-helpers');
-const chai = require('chai');
 
 const { assert } = require('chai');
 
 const {
   testUsers,
-  testBands,
-  testBandMembers
 } = helpers.makeStreetBeatFixtures();
 
 let db;

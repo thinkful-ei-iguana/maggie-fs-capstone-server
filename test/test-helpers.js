@@ -271,7 +271,6 @@ function makeSetlistSongsArray(song_id, song_position, setlist_id, band_id) {
     },
   ];
 }
-/////////////////////////////////
 
 function makeExpectedBands(bands) {
   const listOfBands = bands.map((band) => {
@@ -303,40 +302,16 @@ function makeExpectedBand(bands, band_id) {
   return bandSerialized;
 }
 
-// function makeExpectedThingReviews(users, thingId, reviews) {
-//   const expectedReviews = reviews
-//     .filter(review => review.thing_id === thingId)
-
-//   return expectedReviews.map(review => {
-//     const reviewUser = users.find(user => user.id === review.user_id)
-//     return {
-//       date_created: review.date_created,
-//       id: review.id,
-//       rating: review.rating,
-//       text: review.text,
-//       user: {
-//         date_created: reviewUser.date_created,
-//         full_name: reviewUser.full_name,
-//         id: reviewUser.id,
-//         nickname: reviewUser.nickname,
-//         user_name: reviewUser.user_name,
-//       }
-//     }
-//   })
-// }
-
-// have edited below
 function makeStreetBeatFixtures() {
   const testUsers = makeUsersArray()
-  const testBands = makeBandsArray() //arg testUsers?
-  const testSongs = makeSongsArray() //arg testUsers and testBands?
+  const testBands = makeBandsArray()
+  const testSongs = makeSongsArray()
   const testSetlists = makeSetlistsArray()
   const testSetlistSongs = makeSetlistSongsArray()
   const testBandMembers = makeBandMembersArray()
   return { testUsers, testBands, testSongs, testSetlists, testSetlistSongs, testBandMembers }
 }
 
-// have edited below
 function cleanTables(db) {
   return db.raw(
     `TRUNCATE
@@ -346,12 +321,10 @@ function cleanTables(db) {
       street_setlists,
       street_songs,
       street_bands
-      RESTART IDENTITY;
-      `
+      RESTART IDENTITY;`
   )
 }
 
-// have edited below
 function seedUsers(db, users) {
   const preppedUsers = users.map(user => ({
     ...user,
@@ -376,9 +349,7 @@ function seedTables(db, users, bands, songs, setlists, band_members, setlist_son
       `SELECT setval('street_bands_id_seq', ?)`,
       [bands[bands.length - 1].id]
     )
-    // only insert reviews if there are some, also update the sequence counter
     if (setlists.length) {
-      console.log('setlists length is', setlists.length);
       await trx.into('street_setlists').insert(setlists)
       await trx.raw(
         `SELECT setval('street_setlists_id_seq', ?)`,
@@ -410,15 +381,6 @@ function seedTables(db, users, bands, songs, setlists, band_members, setlist_son
 
 }
 
-function seedMaliciousThing(db, user, thing) {
-  return seedUsers(db, [user])
-    .then(() =>
-      db
-        .into('thingful_things')
-        .insert([thing])
-    )
-}
-
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
   const token = jwt.sign({ user_id: user.id }, secret, {
     subject: user.email,
@@ -440,7 +402,6 @@ module.exports = {
   makeStreetBeatFixtures,
   cleanTables,
   seedTables,
-  seedMaliciousThing,
   seedUsers,
   makeAuthHeader
 }

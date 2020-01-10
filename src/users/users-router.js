@@ -52,16 +52,5 @@ usersRouter
       })
       .catch(next);
   });
-// .delete(requireAuth, (req, res, next) => {
-//   UsersService.deleteUser(
-//     req.app.get('db'),
-//     req.params.user_id
-//   )
-//     .then(numRowsAffected => {
-//       res.status(204).end();
-//     })
-//     .catch(next);
-// });
-
 
 module.exports = usersRouter;

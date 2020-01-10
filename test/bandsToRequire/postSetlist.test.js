@@ -56,7 +56,6 @@ context('Happy path', () => {
         })
       .expect(200)
       .expect(res => {
-        console.log('res body is', res.body);
         expect(res.body).to.have.property('setlist_id');
         expect(res.body.title).to.eql(newSetlist.title);
         expect(res.body.date).to.eql(newSetlist.date);
@@ -68,7 +67,6 @@ context('Happy path', () => {
           .where({ id: res.body.setlist_id })
           .first()
           .then(row => {
-            console.log('row is', row);
             expect(row.title).to.eql(newSetlist.title);
             expect(row.date).to.eql(new Date(newSetlist.date));
           });

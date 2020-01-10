@@ -4,6 +4,7 @@ const helpers = require('./test-helpers');
 
 describe('Users Endpoint', function () {
   let db;
+
   before('make knex instance', () => {
     db = knex({
       client: 'pg',
@@ -11,8 +12,11 @@ describe('Users Endpoint', function () {
     });
     app.set('db', db);
   });
+
   after('disconnect from db', () => db.destroy());
+
   before('cleanup', () => helpers.cleanTables(db));
+
   afterEach('cleanup', () => helpers.cleanTables(db));
 
   describe('POST /api/users', () => {
