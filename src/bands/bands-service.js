@@ -109,7 +109,10 @@ const BandsService = {
   insertSetlist(knex, newSetlist) {
     console.log("inserting new setlist: ", newSetlist);
     return knex
-      .insert(newSetlist)
+      .insert({
+        title: newSetlist.title,
+        date: newSetlist.date
+      })
       .into('street_setlists')
       .returning('*')
       .then(rows => {
