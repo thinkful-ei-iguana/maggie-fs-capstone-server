@@ -1,6 +1,6 @@
 # Street Beat
 
-![Image - Street Beat user dashboard] (imgs/userDash.png)
+![Image - Street Beat user dashboard][./imgs/userDash.png)]
 
 ## Can you hear that?
 
@@ -10,22 +10,23 @@ and mediums (texting, Slacking, emailing, calling, etc). You're all connected on
 Street Beat is a site specifically designed for members of the international street band community - think guerrilla marching bands, a la New Orleans. On Street Beat, band members can sign up for an individual profile and use a private dashboard to manage the bands that they are in (pictured above).  
 
 Each band's page displays the current bandmembers who are registered with Street Beat. The site allows users to manage and add to the group's repertoire, as well as build and save setlists designed with a duration counter that enables a user to see at an approximate glance whether or not the selected tunes measure up to the length of the gig or practice.
-![Image - Street Beat setlist creator] (imgs/createSetlist.png) ![Image - Street Beat setlist creator] (imgs/savedSetlists.png)
+![Image - Street Beat setlist creator][./imgs/createSetlist.png] ![Image - Street Beat setlist creator][./imgs/savedSetlists.png]
 
 ## So... check it out!
 
-[Street Beat live app] (https://street-beat-client.now.sh/ "Street Beat")
+[Street Beat live app](https://street-beat-client.now.sh/ "Street Beat")
 
-[GitHub repository (server)] (https://github.com/thinkful-ei-iguana/maggie-fs-capstone-server "Street Beat server repo")
-[GitHub repository (client)] (https://github.com/thinkful-ei-iguana/maggie-fs-capstone-client "Street Beat client repo")
+[GitHub repository (server)](https://github.com/thinkful-ei-iguana/maggie-fs-capstone-server "Street Beat server repo")
+[GitHub repository (client)](https://github.com/thinkful-ei-iguana/maggie-fs-capstone-client "Street Beat client repo")
 
 ## More to come
 
 This is merely version 1 of what will be a long-standing passion project. As a regularly gigging musician, I have myriad ideas for ways in which Street Beat can serve street band musicians across the world! Here are a few upcoming features that are in development (or soon to be):
->Band pages will be exclusive to those who are confirmed members (verified by an admin/owner in each band)
->Band pages will be a central place to keep useful resources that are typically decentralized (if they exist at all)
->Integration with/referencing to external resources (including bands' public websites, calendars, [gig-o-matic](https://gig-o-matic.appspot.com/ "The Gig-o"), ReverbNation, etc)
->Possible: Band page message interactivity, where members can post messages and customizations to their band dashboard
+
+*Band pages will be exclusive to those who are confirmed members (verified by an admin/owner in each band)
+*Band pages will be a central place to keep useful resources that are typically decentralized (if they exist at all)
+*Integration with/referencing to external resources (including bands' public websites, calendars, [gig-o-matic](https://gig-o-matic.appspot.com/ "The Gig-o"), ReverbNation, etc)
+*Under consideration: Band page message interactivity, where members can post messages and customizations to their band dashboard
 
 My priorities revolve around band-facing functionality, but I eventually intend to allow users to connect with other users outside of the band context. Ideas for this will be in continual development, but one such idea is a master calendar/events page to connect bands and festivals across the world.
 
