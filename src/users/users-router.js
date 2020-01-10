@@ -1,25 +1,9 @@
 const express = require('express');
 const path = require('path');
 const UsersService = require('./users-service');
-const requireAuth = require('../middleware/jwt-auth');
 
 const usersRouter = express.Router();
 const jsonBodyParser = express.json();
-
-const serializeUser = user => ({
-  id: user.id,
-  first_name: user.first_name,
-  last_name: user.last_name,
-  email: user.email,
-  password: user.password
-});
-
-const serializeBand = band => ({
-  band_name: band.band_name
-});
-
-
-
 
 usersRouter
   .route('/')

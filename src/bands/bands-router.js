@@ -162,26 +162,51 @@ bandsRouter
 
 bandsRouter
   .post('/:band_id/join', jsonParser, requireAuth, (req, res, next) => {
-
+    console.log('join band');
     const newBandMember = { band_id: req.params.band_id, user_id: req.user.id };
 
-    for (const [key, value] of Object.entries(newBandMember))
-      if (value === null)
+    for (const [key, value] of Object.entries(newBandMember)) {
+      if (value === null) {
         return res.status(400).json({
           error: { message: `Missing ${key} in request body` }
         });
+      }
+    }
 
-    BandsService.insertBandMember(
-      req.app.get('db'),
-      newBandMember
-    )
-      .then(member => {
-        res
-          .status(201)
-          .location(path.posix.join(req.originalUrl, `/${member.id}`))
-          .json(member);
+    const knexInstance = req.app.get('db');
+    BandsService.getMembersByBandId(knexInstance, req.params.band_id)
+      .then(members => {
+        console.log('members is', members);
+        let foundMember = members.find((member) => {
+          return member.id === newBandMember.user_id;
+        })
+        if (foundMember) {
+          res
+            .status(201)
+            .location(path.posix.join(req.originalUrl, `/${foundMember.id}`))
+            .json({
+              error
+            });
+        }
+        else {
+          BandsService.insertBandMember(
+            knexInstance,
+            newBandMember
+          ).then(member => {
+            res
+              .status(201)
+              .location(path.posix.join(req.originalUrl, `/${member.id}`))
+              .json({
+                status: "added",
+                member: member
+              });
+          });
+        }
       })
-      .catch(next);
+      .catch((err) => {
+        console.error("something went wrong", err);
+        next(err);
+      });
   });
 
 

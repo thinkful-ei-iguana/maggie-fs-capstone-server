@@ -43,12 +43,17 @@ const BandsService = {
   },
 
   getMembersByBandId(knex, id) {
+    console.log('get memberes by band id', id);
     return knex
       .from('street_band_members')
       .where('street_band_members.band_id', id)
       .join('street_users', { 'street_band_members.user_id': 'street_users.id' })
       .join('street_bands', { 'street_band_members.band_id': 'street_bands.id' })
-      .select('street_users.first_name', 'street_users.last_name', 'street_bands.band_name');
+      .select('street_users.id', 'street_users.first_name', 'street_users.last_name', 'street_bands.band_name')
+      .catch((err) => {
+        console.error('err getting members of band', err);
+        throw err;
+      });
   },
 
   getSetlistById(knex, id) {
