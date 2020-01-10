@@ -38,3 +38,21 @@ My priorities revolve around band-facing functionality, but I eventually intend 
 **Back-End:** *NodeJS | KnexJS | ExpressJS | PostgreSQL*
 
 **Testing:** *Mocha | Chai*
+
+## API Documentation
+
+| **HTTP Verb** | **Path**                           | **Used for**         |
+| --------- |:--------------------------------------:| --------------------:|
+| POST      | /auth/login                            | login authorization  |
+| POST      | /users                                 | create new user      |
+| GET       | /bands                                 | search all bands     |
+| POST      | /bands                                 | register band        |
+| GET       | /bands/mybands                         | view user's bands    |
+| GET       | /bands/:band_id                        | band dashboard       |
+| GET       | /bands/:band_id/setlists               | view saved setlists  |
+| POST      | /bands/:band_id/join                   | join a band          |
+| GET       | /bands/:band_id/bandmembers            | view bandmembers     |
+| GET       | /bands/:band_id/songs                  | view band repertoire |
+| POST      | /bands/:band_id/songs                  | add new song         |
+| GET       | /bands/:band_id/setlists/:setlist_id   | view saved setlist   |
+| POST      | /bands/:band_id/setlists/create        | create new setlist   |
