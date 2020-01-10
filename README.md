@@ -1,6 +1,6 @@
 # Street Beat
 
-![Image - Street Beat user dashboard](https://photos.app.goo.gl/2USUryWjFqEXkQc28 "Street Beat user dashboard")
+![Street Beat user dashboard screenshot](imgs/userDash.png)
 
 ## Can you hear that?
 
