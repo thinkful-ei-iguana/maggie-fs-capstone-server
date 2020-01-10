@@ -114,6 +114,10 @@ const BandsService = {
       .returning('*')
       .then(rows => {
         return rows[0];
+      })
+      .catch((err) => {
+        console.error("error inserting new setlist", err);
+        throw err;
       });
   },
 
