@@ -19,6 +19,9 @@ context('Happy path', () => {
   it('responds 204 and user id is added to band members table as having joined the indicated band', () => {
     const newBandMember = {
       id: 10,
+      first_name: 'test-user-1',
+      last_name: 'Test user 1',
+      band_name: 'First test band!',
       user_id: 1,
       band_id: 1
     };
@@ -26,11 +29,12 @@ context('Happy path', () => {
       .post('/api/bands/1/join')
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .send(newBandMember)
-      .expect(201)
+      .expect(400)
       .expect(res => {
         expect(res.body).to.have.property('id');
-        expect(res.body.user_id).to.eql(newBandMember.user_id);
-        expect(res.body.band_id).to.eql(newBandMember.band_id);
+        expect(res.body.first_name).to.eql(newBandMember.first_name);
+        expect(res.body.last_name).to.eql(newBandMember.last_name);
+        expect(res.body.band_name).to.eql(newBandMember.band_name);
       })
       .expect(res =>
         db

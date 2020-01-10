@@ -88,40 +88,7 @@ bandsRouter
   })
   .get(requireAuth, (req, res, next) => {
     res.json(serializeBand(res.band));
-  })
-// .delete(requireAuth, (req, res, next) => {
-//   BandsService.deleteBand(
-//     req.app.get('db'),
-//     req.params.band_id
-//   )
-//     .then(numRowsAffected => {
-//       res.status(204).end();
-//     })
-//     .catch(next);
-// })
-// .patch(jsonParser, requireAuth, (req, res, next) => {
-//   const { id, band_name, city, state, country, description } = req.body;
-//   const bandToUpdate = { id, band_name, city, state, country, description };
-
-//   const numberOfValues = Object.values(bandToUpdate).filter(Boolean).length;
-//   if (numberOfValues === 0) {
-//     return res.status(400).json({
-//       error: {
-//         message: 'Request body must contain either \'description\' or \'band_name\''
-//       }
-//     });
-//   }
-
-//   BandsService.updateBand(
-//     req.app.get('db'),
-//     req.params.band_id,
-//     bandToUpdate
-//   )
-//     .then(numRowsAffected => {
-//       res.status(204).end();
-//     })
-//     .catch(next);
-// });
+  });
 
 bandsRouter
   .route('/:band_id/setlists')
@@ -134,35 +101,10 @@ bandsRouter
       .catch((err) => {
         next(err);
       });
-  })
-// .post(jsonParser, requireAuth, (req, res, next) => {
-//   const { title, date } = req.body;
-//   const newSetlist = { title, date };
-//   console.log('newSetlist is', newSetlist);
-
-//   for (const [key, value] of Object.entries(newSetlist))
-//     if (value === null)
-//       return res.status(400).json({
-//         error: { message: `Missing ${key} in request body` }
-//       });
-
-//   BandsService.insertSetlist(
-//     req.app.get('db'),
-//     newSetlist
-//   )
-//     .then(setlist => {
-//       console.log('setlist is', setlist);
-//       res
-//         .status(201)
-//         .location(path.posix.join(req.originalUrl, `/${setlist.id}`))
-//         .json(setlist);
-//     })
-//     .catch(next);
-// });
+  });
 
 bandsRouter
   .post('/:band_id/join', jsonParser, requireAuth, (req, res, next) => {
-    console.log('join band');
     const newBandMember = { band_id: req.params.band_id, user_id: req.user.id };
 
     for (const [key, value] of Object.entries(newBandMember)) {
@@ -176,16 +118,19 @@ bandsRouter
     const knexInstance = req.app.get('db');
     BandsService.getMembersByBandId(knexInstance, req.params.band_id)
       .then(members => {
-        console.log('members is', members);
         let foundMember = members.find((member) => {
           return member.id === newBandMember.user_id;
         })
         if (foundMember) {
           res
-            .status(201)
+            .status(400)
             .location(path.posix.join(req.originalUrl, `/${foundMember.id}`))
             .json({
-              error
+              id: foundMember.id,
+              error: { message: `${foundMember.first_name} has already joined this band.` },
+              first_name: foundMember.first_name,
+              last_name: foundMember.last_name,
+              band_name: foundMember.band_name
             });
         }
         else {
@@ -197,14 +142,13 @@ bandsRouter
               .status(201)
               .location(path.posix.join(req.originalUrl, `/${member.id}`))
               .json({
-                status: "added",
-                member: member
+                user_id: member.id,
+                band_id: member.band_id
               });
           });
         }
       })
       .catch((err) => {
-        console.error("something went wrong", err);
         next(err);
       });
   });
@@ -260,54 +204,23 @@ bandsRouter
 bandsRouter
   .route('/:band_id/setlists/:setlist_id')
   .get(requireAuth, (req, res, next) => {
-    console.log("get setlist");
     const knexInstance = req.app.get('db');
     BandsService.getSetlistById(knexInstance, req.params.setlist_id)
       .then(setlist => {
-        console.log("got setlist", setlist);
         setlist = setlist.sort((song1, song2) => { return song1.song_position - song2.song_position });
         res.json(setlist);
       })
       .catch((err) => {
         next(err);
       });
-  })
-// under construction
-// .patch(jsonParser, requireAuth, (req, res, next) => {
-//   const { song_id, band_id, setlist_id, song_position } = req.body;
-//   const setlistToUpdate = { song_id, band_id, setlist_id, song_position };
-
-//   const numberOfValues = Object.values(setlistToUpdate).filter(Boolean).length;
-//   if (numberOfValues === 0) {
-//     return res.status(400).json({
-//       error: {
-//         message: 'Request body must contain either title, artist, or duration'
-//       }
-//     });
-//   }
-
-//   BandsService.updateSetlist(
-//     req.app.get('db'),
-//     req.params.band_id,
-//     setlistToUpdate
-//   )
-//     .then(numRowsAffected => {
-//       res.status(204).end();
-//     })
-//     .catch(next);
-// });
-// /////////////////////////////////////////
+  });
 
 bandsRouter
   .route('/:band_id/setlists/create')
   .post(jsonParser, requireAuth, (req, res, next) => {
-    console.log('post create setlist');
     const newSetlist = req.body.newSetlist;
-    console.log('reqbody is', req.body);
     BandsService.insertSetlist(req.app.get('db'), newSetlist)
       .then((setlist) => {
-        console.log('setlist is', setlist);
-        console.log('reqbody is', req.body);
         const songsToAdd = req.body.songsToAdd;
         for (let i = 0; i < songsToAdd.length; i++) {
           if (!songsToAdd[i].song_id || !songsToAdd[i].band_id) {
@@ -316,9 +229,6 @@ bandsRouter
             });
           }
         }
-        console.log('random change');
-        console.log('hoodeehoo');
-
         // adds each song to the db in order, waiting for the previous db write to succeed before writing the next song
         let updates = Promise.resolve();
         for (let i = 0; i < songsToAdd.length; ++i) {
@@ -333,14 +243,12 @@ bandsRouter
             );
           });
         }
-        console.log('updates is', updates);
         return updates
           .then(() => {
             return setlist;
           });
       })
       .then((setlist) => {
-        console.log('finished saving setlist', setlist);
         res
           .status(200)
           .json({

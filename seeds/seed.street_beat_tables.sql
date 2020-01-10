@@ -41,11 +41,11 @@ VALUES
   ('Crazy In Love', 'Beyonce', '4', 2),
   ('Hips Dont Lie', 'Shakira', '4', 2);
 
-INSERT INTO street_setlists (title, date)
+INSERT INTO street_setlists (title, date, total_duration)
 VALUES
-  ('MFA Gig', '1/15/20'),
-  ('Practice', '3/2/2020'),
-  ('HONK Fest', '5/2/2019');
+  ('MFA Gig', '1/15/20', 50),
+  ('Practice', '3/2/2020', 34),
+  ('HONK Fest', '5/2/2019', 33);
 
 INSERT INTO street_band_members (user_id, band_id)
 VALUES

@@ -49,76 +49,46 @@ describe('Bands Endpoints', function () {
   );
 
   describe('GET /api/bands', () => {
-    console.log('GET /api/bands');
     require('./bandsToRequire/getBands.test');
   });
 
   describe('POST /api/bands', () => {
-    console.log('POST /api/bands');
     require('./bandsToRequire/postBands.test');
   });
 
   describe('GET /api/bands/mybands', () => {
-    console.log('/GET api/bands/mybands');
     require('./bandsToRequire/getMyBands.test');
   });
 
   describe('GET /api/bands/:band_id', () => {
-    console.log('GET /api/bands/:band_id');
     require('./bandsToRequire/getBand.test');
   });
 
   describe('GET /api/bands/:band_id/setlists', () => {
-    console.log('GET /api/bands/:band_id/setlists');
     require('./bandsToRequire/getSetlists.test');
   });
 
   describe('POST /api/bands/:band_id/join', () => {
-    console.log('POST /api/bands/:band_id/join');
     require('./bandsToRequire/postJoinBand.test');
   });
 
   describe('GET /api/bands/:band_id/bandmembers', () => {
-    console.log('GET /api/bands/:band_id/bandmembers');
     require('./bandsToRequire/getBandMembers.test');
   });
 
   describe('GET /api/bands/:band_id/songs', () => {
-    console.log('GET /api/bands/:band_id/songs');
     require('./bandsToRequire/getSongs.test');
   });
 
   describe('POST /api/bands/:band_id/songs', () => {
-    console.log('POST /api/bands/:band_id/songs');
     require('./bandsToRequire/postSongs.test');
   });
 
   describe('GET /api/bands/:band_id/setlists/:setlist_id', () => {
-    console.log('GET /api/bands/:band_id/setlists/:setlist_id');
     require('./bandsToRequire/getSetlist.test');
   });
 
-  describe('PATCH /api/bands/:band_id/setlists/:setlist_id', () => {
-    console.log('PATCH /api/bands/:band_id/setlists/:setlist_id');
-  });
-
   describe('POST /api/bands/:band_id/setlists/create', () => {
-    console.log('POST /api/bands/:band_id/setlists/create');
     require('./bandsToRequire/postSetlist.test');
   });
-
-
-}); // end
-
-// GET api/bands/
-// POST api/bands/
-// GET api/bands/mybands
-// GET api/bands/:band_id
-// GET api/bands/:band_id/setlists
-// POST api/bands/:band_id/join
-// GET api/bands/:band_id/bandmembers
-// GET api/bands/:band_id/songs
-// POST api/bands/:band_id/songs
-// GET api/bands/:band_id/setlists/:setlist_id
-// PATCH api/bands/:band_id/setlists/:setlist_id
-// POST api/bands/:band_id/setlists/create
+});

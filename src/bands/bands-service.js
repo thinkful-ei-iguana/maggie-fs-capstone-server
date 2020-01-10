@@ -1,7 +1,3 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const config = require('../config');
-
 const BandsService = {
 
   deleteBand(knex, id) {
@@ -21,11 +17,13 @@ const BandsService = {
       .select('*')
       .from('street_bands');
   },
+
   getBandWithBandName(db, band_name) {
     return db('street_bands')
       .where({ band_name })
       .first();
   },
+
   getBandsByUserId(knex, id) {
     return knex
       .from('street_band_members')
@@ -43,7 +41,6 @@ const BandsService = {
   },
 
   getMembersByBandId(knex, id) {
-    console.log('get memberes by band id', id);
     return knex
       .from('street_band_members')
       .where('street_band_members.band_id', id)
@@ -51,7 +48,6 @@ const BandsService = {
       .join('street_bands', { 'street_band_members.band_id': 'street_bands.id' })
       .select('street_users.id', 'street_users.first_name', 'street_users.last_name', 'street_bands.band_name')
       .catch((err) => {
-        console.error('err getting members of band', err);
         throw err;
       });
   },
@@ -71,10 +67,10 @@ const BandsService = {
         'sss.song_position'
       )
       .catch((err) => {
-        console.error("error getting setlist", err);
         throw err;
       });
   },
+
   getSetlistsByBandId(knex, id) {
     return knex
       .from('street_setlist_songs')
@@ -89,6 +85,7 @@ const BandsService = {
       .select('street_songs.id')
       .where('street_songs.title', songTitle);
   },
+
   getSongsByBandId(knex, id) {
     return knex
       .from('street_songs')
@@ -105,7 +102,6 @@ const BandsService = {
         return rows[0];
       })
       .catch((err) => {
-        console.error('error trying to create new band:', err);
         throw err;
       });
   },
@@ -121,7 +117,6 @@ const BandsService = {
   },
 
   insertSetlist(knex, newSetlist) {
-    console.log("inserting new setlist: ", newSetlist);
     return knex
       .insert(newSetlist)
       .into('street_setlists')
@@ -130,7 +125,6 @@ const BandsService = {
         return rows[0];
       })
       .catch((err) => {
-        console.error("error inserting new setlist", err);
         throw err;
       });
   },
@@ -165,7 +159,6 @@ const BandsService = {
         return rows[0];
       })
       .catch((err) => {
-        console.error("error updating setlist", err);
         throw err;
       });
   }

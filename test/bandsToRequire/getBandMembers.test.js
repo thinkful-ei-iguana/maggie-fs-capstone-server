@@ -14,16 +14,19 @@ context('Given there are bandmembers in the database', () => {
     const expectedBandMembers =
       [
         {
+          id: 1,
           first_name: 'test-user-1',
           last_name: 'Test user 1',
           band_name: 'First test band!'
         },
         {
+          id: 2,
           first_name: 'test-user-2',
           last_name: 'Test user 2',
           band_name: 'First test band!'
         },
         {
+          id: 3,
           first_name: 'test-user-3',
           last_name: 'Test user 3',
           band_name: 'First test band!'
