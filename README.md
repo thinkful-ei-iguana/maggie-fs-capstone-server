@@ -1,6 +1,6 @@
 # Street Beat
 
-![Image - Street Beat user dashboard][./imgs/userDash.png)]
+![Image - Street Beat user dashboard](https://photos.app.goo.gl/2USUryWjFqEXkQc28)
 
 ## Can you hear that?
 
@@ -10,13 +10,14 @@ and mediums (texting, Slacking, emailing, calling, etc). You're all connected on
 Street Beat is a site specifically designed for members of the international street band community - think guerrilla marching bands, a la New Orleans. On Street Beat, band members can sign up for an individual profile and use a private dashboard to manage the bands that they are in (pictured above).  
 
 Each band's page displays the current bandmembers who are registered with Street Beat. The site allows users to manage and add to the group's repertoire, as well as build and save setlists designed with a duration counter that enables a user to see at an approximate glance whether or not the selected tunes measure up to the length of the gig or practice.
-![Image - Street Beat setlist creator][./imgs/createSetlist.png] ![Image - Street Beat setlist creator][./imgs/savedSetlists.png]
+![Image - Street Beat setlist creator](https://photos.app.goo.gl/5JaFo827rvweUQWA7) ![Image - Street Beat setlist creator](https://photos.app.goo.gl/aGrXXAW7euccoFp2A)
 
 ## So... check it out!
 
 [Street Beat live app](https://street-beat-client.now.sh/ "Street Beat")
 
 [GitHub repository (server)](https://github.com/thinkful-ei-iguana/maggie-fs-capstone-server "Street Beat server repo")
+
 [GitHub repository (client)](https://github.com/thinkful-ei-iguana/maggie-fs-capstone-client "Street Beat client repo")
 
 ## More to come
