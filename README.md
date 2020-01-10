@@ -1,6 +1,6 @@
 # Street Beat
 
-![Image - Street Beat user dashboard](https://photos.app.goo.gl/2USUryWjFqEXkQc28)
+![Image - Street Beat user dashboard](https://photos.app.goo.gl/2USUryWjFqEXkQc28 "Street Beat user dashboard")
 
 ## Can you hear that?
 
@@ -10,7 +10,7 @@ and mediums (texting, Slacking, emailing, calling, etc). You're all connected on
 Street Beat is a site specifically designed for members of the international street band community - think guerrilla marching bands, a la New Orleans. On Street Beat, band members can sign up for an individual profile and use a private dashboard to manage the bands that they are in (pictured above).  
 
 Each band's page displays the current bandmembers who are registered with Street Beat. The site allows users to manage and add to the group's repertoire, as well as build and save setlists designed with a duration counter that enables a user to see at an approximate glance whether or not the selected tunes measure up to the length of the gig or practice.
-![Image - Street Beat setlist creator](https://photos.app.goo.gl/5JaFo827rvweUQWA7) ![Image - Street Beat setlist creator](https://photos.app.goo.gl/aGrXXAW7euccoFp2A)
+![Image - Street Beat setlist creator](https://photos.app.goo.gl/5JaFo827rvweUQWA7 "Setlist creator tool") ![Image - Street Beat saved setlists](https://photos.app.goo.gl/aGrXXAW7euccoFp2A "Saved setlists")
 
 ## So... check it out!
 
@@ -34,5 +34,7 @@ My priorities revolve around band-facing functionality, but I eventually intend 
 ## Technology used
 
 **Front-End:** *ReactJS | CSS*
+
 **Back-End:** *NodeJS | KnexJS | ExpressJS | PostgreSQL*
+
 **Testing:** *Mocha | Chai*
