@@ -1,7 +1,5 @@
 # Street Beat
 
-![Street Beat user dashboard screenshot](imgs/header.png)
-
 ## Can you hear that?
 
 ...It's the sound of silence where your bandmates would usually be sidebarring in disorganized fashion with eachother about what the group plans to play at that evening's gig via various unconnected platforms 
