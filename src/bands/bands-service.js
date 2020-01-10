@@ -152,6 +152,10 @@ const BandsService = {
       .returning('*')
       .then(rows => {
         return rows[0];
+      })
+      .catch((err) => {
+        console.error("error updating setlist", err);
+        throw err;
       });
   }
 };
