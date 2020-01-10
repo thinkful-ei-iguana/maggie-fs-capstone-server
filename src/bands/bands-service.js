@@ -98,7 +98,13 @@ const BandsService = {
       .returning('*')
       .then(rows => {
         return rows[0];
+      })
+      .catch((err) => {
+        console.error('error trying to create new band:', err);
+        throw err;
       });
+
+
   },
 
   insertBandMember(knex, newBandMember) {
