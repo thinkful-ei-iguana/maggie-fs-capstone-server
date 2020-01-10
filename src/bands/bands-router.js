@@ -238,6 +238,7 @@ bandsRouter
     const knexInstance = req.app.get('db');
     BandsService.getSetlistById(knexInstance, req.params.setlist_id)
       .then(setlist => {
+        console.log("got setlist", setlist);
         res.json(setlist);
       })
       .catch((err) => {
