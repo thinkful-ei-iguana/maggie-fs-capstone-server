@@ -63,7 +63,11 @@ const BandsService = {
         'street_songs.artist',
         'street_songs.duration',
         'street_setlists.total_duration'
-      );
+      )
+      .catch((err) => {
+        console.error("error getting setlist", err);
+        throw err;
+      });
   },
   getSetlistsByBandId(knex, id) {
     return knex

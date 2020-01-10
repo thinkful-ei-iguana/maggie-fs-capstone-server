@@ -235,6 +235,7 @@ bandsRouter
 bandsRouter
   .route('/:band_id/setlists/:setlist_id')
   .get(requireAuth, (req, res, next) => {
+    console.log("get setlist");
     const knexInstance = req.app.get('db');
     BandsService.getSetlistById(knexInstance, req.params.setlist_id)
       .then(setlist => {
