@@ -57,12 +57,13 @@ const BandsService = {
       .where('sss.setlist_id', id)
       .leftJoin('street_setlists', { 'sss.setlist_id': 'street_setlists.id' })
       .leftJoin('street_songs', { 'sss.song_id': 'street_songs.id' })
-      .select('street_setlists.title',
+      .select('street_setlists.title AS setlist_title',
         'street_setlists.date',
+        'street_setlists.total_duration',
         'street_songs.title',
         'street_songs.artist',
         'street_songs.duration',
-        'street_setlists.total_duration'
+        'sss.song_position'
       )
       .catch((err) => {
         console.error("error getting setlist", err);

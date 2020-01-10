@@ -23,11 +23,17 @@ describe('Bands Endpoints', function () {
     app.set('db', db);
   });
 
-  after('disconnect from db', () => db.destroy());
+  after('disconnect from db', () => {
+    return db.destroy();
+  });
 
-  before('cleanup', () => helpers.cleanTables(db));
+  before('cleanup', () => {
+    return helpers.cleanTables(db);
+  });
 
-  afterEach('cleanup', () => helpers.cleanTables(db));
+  afterEach('cleanup', () => {
+    return helpers.cleanTables(db);
+  });
 
   beforeEach('insert', () => {
     return helpers.seedTables(

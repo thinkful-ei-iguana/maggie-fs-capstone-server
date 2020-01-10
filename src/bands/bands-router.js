@@ -240,6 +240,7 @@ bandsRouter
     BandsService.getSetlistById(knexInstance, req.params.setlist_id)
       .then(setlist => {
         console.log("got setlist", setlist);
+        setlist = setlist.sort((song1, song2) => { return song1.song_position - song2.song_position });
         res.json(setlist);
       })
       .catch((err) => {
@@ -318,7 +319,9 @@ bandsRouter
         res
           .status(200)
           .json({
-            setlist_id: setlist.id
+            setlist_id: setlist.id,
+            title: setlist.title,
+            date: setlist.date,
           });
       })
       .catch(next);

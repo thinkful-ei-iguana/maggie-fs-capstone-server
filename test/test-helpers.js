@@ -130,22 +130,26 @@ function makeSetlistsArray() {
     {
       id: 1,
       title: 'Gig1',
-      date: '2029-01-22T00:00:00.000Z'
+      date: '2029-01-22T00:00:00.000Z',
+      total_duration: 2
     },
     {
       id: 2,
       title: 'Gig2',
-      date: '2029-01-22T00:00:00.000Z'
+      date: '2029-01-22T00:00:00.000Z',
+      total_duration: 4
     },
     {
       id: 3,
       title: 'Gig3',
-      date: '2029-01-22T00:00:00.000Z'
+      date: '2029-01-22T00:00:00.000Z',
+      total_duration: 3
     },
     {
       id: 4,
       title: 'Gig4',
-      date: '2029-01-22T00:00:00.000Z'
+      date: '2029-01-22T00:00:00.000Z',
+      total_duration: 26
     }
   ];
 }
@@ -265,13 +269,6 @@ function makeSetlistSongsArray(song_id, song_position, setlist_id, band_id) {
       setlist_id: 2,
       band_id: 1
     },
-    {
-      id: 10,
-      song_id: 3,
-      song_position: 2,
-      setlist_id: 1,
-      band_id: 1
-    }
   ];
 }
 /////////////////////////////////
