@@ -123,7 +123,7 @@ bandsRouter
         })
         if (foundMember) {
           res
-            .status(400)
+            .status(200)
             .location(path.posix.join(req.originalUrl, `/${foundMember.id}`))
             .json({
               id: foundMember.id,

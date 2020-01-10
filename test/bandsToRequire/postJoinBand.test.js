@@ -16,7 +16,7 @@ before('make knex instance', () => {
 });
 
 context('Happy path', () => {
-  it('responds 204 and user id is added to band members table as having joined the indicated band', () => {
+  it.only('responds 204 and user id is added to band members table as having joined the indicated band', () => {
     const newBandMember = {
       id: 10,
       first_name: 'test-user-1',
@@ -29,7 +29,7 @@ context('Happy path', () => {
       .post('/api/bands/1/join')
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .send(newBandMember)
-      .expect(400)
+      .expect(200)
       .expect(res => {
         expect(res.body).to.have.property('id');
         expect(res.body.first_name).to.eql(newBandMember.first_name);
