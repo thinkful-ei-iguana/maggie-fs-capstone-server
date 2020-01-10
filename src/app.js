@@ -7,7 +7,6 @@ const { NODE_ENV } = require('./config');
 const bandsRouter = require('./bands/bands-router');
 const usersRouter = require('./users/users-router');
 const authRouter = require('./auth/auth-router');
-console.log('starting server');
 const app = express();
 
 app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'common', {
@@ -21,7 +20,6 @@ app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 const textParser = express.text();
 app.route('/api').post(textParser, (req, res, next) => {
-  console.log('received: ', req.body);
   res.send('hello world. -server');
 });
 
@@ -30,7 +28,6 @@ app.use((error, req, res, next) => {
   if (process.env.NODE_ENV === 'production') {
     response = { error: { message: 'server error' } };
   } else {
-    console.log(error);
     response = { error };
   }
   res.status(500).json(response);

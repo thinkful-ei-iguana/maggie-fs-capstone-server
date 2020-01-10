@@ -52,7 +52,6 @@ const BandsService = {
   },
 
   getSetlistById(knex, id) {
-    console.log('getsetlistbyid');
     return knex
       .from('street_setlist_songs AS sss')
       .where('sss.setlist_id', id)
@@ -108,7 +107,6 @@ const BandsService = {
   },
 
   insertSetlist(knex, newSetlist) {
-    console.log('insertSetlist');
     return knex
       .insert(newSetlist)
       .into('street_setlists')
@@ -119,7 +117,6 @@ const BandsService = {
   },
 
   insertSong(knex, newSong) {
-    console.log('insertSong');
     return knex
       .insert(newSong)
       .into('street_songs')
@@ -136,7 +133,6 @@ const BandsService = {
   },
 
   updateSetlist(knex, song_id, setlist_id, band_id, song_position) {
-    console.log('updateSetlist');
     return knex
       .insert({
         song_id: song_id,

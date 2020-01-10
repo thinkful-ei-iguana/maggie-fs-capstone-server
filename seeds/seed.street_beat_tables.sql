@@ -26,7 +26,7 @@ INSERT INTO street_songs (title, artist, duration, band_id)
 VALUES
   ('Asterix', 'Gallowstreet', '4', 1),
   ('Cuzco', 'Broken Brass Ensemble', '5', 1),
-  ('When You Know', 'Hackney Collier Band', '3', 1),
+  ('Radio Kabul', 'Express Brass band', '4', 1),
   ('Louise', 'Fiati Sprecati', '3', 1),
   ('3AM Bounce', 'No BS Brass Band', '4', 1),
   ('Strollin', 'Lucas Paquette', '3', 1),
@@ -61,20 +61,20 @@ VALUES
 INSERT INTO street_setlist_songs (song_id, song_position, setlist_id, band_id)
 VALUES
   (1, 1, 3, 1),
-  (4, 2, 3, 1),
+  (4, 0, 3, 1),
   (2, 1, 2, 1),
   (4, 2, 2, 1),
-  (5, 3, 2, 1),
+  (5, 0, 2, 1),
   (10, 1, 1, 2),
   (11, 2, 1, 2),
   (16, 3, 1, 2),
   (14, 4, 1, 2),
-  (12, 5, 1, 2),
+  (12, 0, 1, 2),
   (15, 1, 2, 2),
   (11, 2, 2, 2),
   (16, 3, 2, 2),
   (10, 4, 2, 2),
-  (14, 5, 2, 2);
+  (14, 0, 2, 2);
 
 
 COMMIT;

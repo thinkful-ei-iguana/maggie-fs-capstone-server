@@ -2,22 +2,11 @@ const path = require('path');
 const express = require('express');
 const xss = require('xss');
 const BandsService = require('./bands-service');
-const BandMembersService = require('../bandMembers/bandMembers-service');
 const requireAuth = require('../middleware/jwt-auth');
-
-//protected endpoint
 
 const bandsRouter = express.Router();
 const jsonParser = express.json();
 
-// const serializeBand = band => ({
-//   id: band.id,
-//   band_name: band.band_name,
-//   city: band.city,
-//   state: band.state,
-//   country: band.country,
-//   description: band.description
-// });
 const serializeBand = (band) => {
   return {
     ...band
@@ -34,10 +23,8 @@ bandsRouter
           const filterResults = bands.filter((band) => {
             return band.band_name.toLowerCase().includes(req.query.q.toLowerCase());
           });
-          console.log('filterresults is', filterResults);
           res.json(filterResults.map(serializeBand));
         } else {
-          console.log('bands is', bands);
           res.json(bands.map(serializeBand));
         }
       })
@@ -74,7 +61,6 @@ bandsRouter
     const knexInstance = req.app.get('db');
     BandsService.getBandsByUserId(knexInstance, req.user.id)
       .then(bands => {
-        console.log('bands is', bands);
         res.json(bands);
       })
       .catch((err) => {
@@ -103,39 +89,39 @@ bandsRouter
   .get(requireAuth, (req, res, next) => {
     res.json(serializeBand(res.band));
   })
-  .delete(requireAuth, (req, res, next) => {
-    BandsService.deleteBand(
-      req.app.get('db'),
-      req.params.band_id
-    )
-      .then(numRowsAffected => {
-        res.status(204).end();
-      })
-      .catch(next);
-  })
-  .patch(jsonParser, requireAuth, (req, res, next) => {
-    const { id, band_name, city, state, country, description } = req.body;
-    const bandToUpdate = { id, band_name, city, state, country, description };
+// .delete(requireAuth, (req, res, next) => {
+//   BandsService.deleteBand(
+//     req.app.get('db'),
+//     req.params.band_id
+//   )
+//     .then(numRowsAffected => {
+//       res.status(204).end();
+//     })
+//     .catch(next);
+// })
+// .patch(jsonParser, requireAuth, (req, res, next) => {
+//   const { id, band_name, city, state, country, description } = req.body;
+//   const bandToUpdate = { id, band_name, city, state, country, description };
 
-    const numberOfValues = Object.values(bandToUpdate).filter(Boolean).length;
-    if (numberOfValues === 0) {
-      return res.status(400).json({
-        error: {
-          message: 'Request body must contain either \'description\' or \'band_name\''
-        }
-      });
-    }
+//   const numberOfValues = Object.values(bandToUpdate).filter(Boolean).length;
+//   if (numberOfValues === 0) {
+//     return res.status(400).json({
+//       error: {
+//         message: 'Request body must contain either \'description\' or \'band_name\''
+//       }
+//     });
+//   }
 
-    BandsService.updateBand(
-      req.app.get('db'),
-      req.params.band_id,
-      bandToUpdate
-    )
-      .then(numRowsAffected => {
-        res.status(204).end();
-      })
-      .catch(next);
-  });
+//   BandsService.updateBand(
+//     req.app.get('db'),
+//     req.params.band_id,
+//     bandToUpdate
+//   )
+//     .then(numRowsAffected => {
+//       res.status(204).end();
+//     })
+//     .catch(next);
+// });
 
 bandsRouter
   .route('/:band_id/setlists')
@@ -143,7 +129,6 @@ bandsRouter
     const knexInstance = req.app.get('db');
     BandsService.getSetlistsByBandId(knexInstance, req.params.band_id)
       .then(setlists => {
-        console.log('setlists is', setlists);
         res.json(setlists);
       })
       .catch((err) => {
@@ -213,7 +198,6 @@ bandsRouter
       });
   })
 
-
 bandsRouter
   .route('/:band_id/songs')
   .get(requireAuth, (req, res, next) => {
@@ -227,16 +211,13 @@ bandsRouter
       });
   })
   .post(jsonParser, requireAuth, (req, res, next) => {
-    console.log('req.body is', req.body);
     const { band_id, title, artist, duration } = req.body;
     const newSong = { band_id, title, artist, duration };
-    console.log('pre insert song')
-    for (const [key, value] of Object.entries(newSong))
+    ; for (const [key, value] of Object.entries(newSong))
       if (value === null)
         return res.status(400).json({
           error: { message: `Missing ${key} in request body` }
         });
-    console.log('pre insert song')
     BandsService.insertSong(
       req.app.get('db'),
       newSong
@@ -246,6 +227,7 @@ bandsRouter
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${song.id}`))
           .json(song);
+
       })
       .catch(next);
   });
@@ -254,10 +236,8 @@ bandsRouter
   .route('/:band_id/setlists/:setlist_id')
   .get(requireAuth, (req, res, next) => {
     const knexInstance = req.app.get('db');
-    // console.log('reqparamsid is', req);
     BandsService.getSetlistById(knexInstance, req.params.setlist_id)
       .then(setlist => {
-        // console.log('setlist is', setlist);
         res.json(setlist);
       })
       .catch((err) => {
@@ -293,13 +273,14 @@ bandsRouter
 bandsRouter
   .route('/:band_id/setlists/create')
   .post(jsonParser, requireAuth, (req, res, next) => {
+    console.log('post create setlist');
     const newSetlist = req.body.newSetlist;
-
+    console.log('reqbody is', req.body);
     BandsService.insertSetlist(req.app.get('db'), newSetlist)
-
       .then((setlist) => {
+        console.log('setlist is', setlist);
+        console.log('reqbody is', req.body);
         const songsToAdd = req.body.songsToAdd;
-        console.log('songstoadd are', songsToAdd);
         for (let i = 0; i < songsToAdd.length; i++) {
           if (!songsToAdd[i].song_id || !songsToAdd[i].band_id) {
             return res.status(400).json({
@@ -307,6 +288,8 @@ bandsRouter
             });
           }
         }
+        console.log('random change');
+        console.log('hoodeehoo');
 
         // adds each song to the db in order, waiting for the previous db write to succeed before writing the next song
         let updates = Promise.resolve();
@@ -322,6 +305,7 @@ bandsRouter
             );
           });
         }
+        console.log('updates is', updates);
         return updates
           .then(() => {
             return setlist;
